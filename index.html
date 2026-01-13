@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigilant - Monitoramento Inteligente de Aplicações</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-black: #040607;
+            --color-black-light: #0d1117;
+            --color-gray-dark: #5D5F60;
+            --color-blue-dark: #1F4F8F;
+            --color-blue-light: #9DBDCC;
+            --color-blue-vibrant: #0B5FC6;
+            --color-text: #EBEDEF;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--color-text);
+            background-color: var(--color-black);
+            overflow-x: hidden;
+        }
+
+        .font-code {
+            font-family: 'Fira Code', 'Monaco', 'Courier New', monospace;
+        }
+
+        /* Animated Grid Background */
+        .grid-bg {
+            background-color: var(--color-black);
+            background-image: 
+                linear-gradient(rgba(11, 95, 198, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(11, 95, 198, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            position: relative;
+        }
+
+        .grid-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(11, 95, 198, 0.1), transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Glow Effects */
+        .glow-blue {
+            box-shadow: 0 0 30px rgba(11, 95, 198, 0.3), 0 0 60px rgba(11, 95, 198, 0.1);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 30px rgba(11, 95, 198, 0.5);
+        }
+
+        .neon-border {
+            border: 1px solid rgba(11, 95, 198, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(45deg, transparent, rgba(11, 95, 198, 0.5), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .neon-border:hover::before {
+            opacity: 1;
+        }
+
+        .neon-border:hover {
+            border-color: rgba(11, 95, 198, 0.6);
+            box-shadow: 0 0 20px rgba(11, 95, 198, 0.2);
+        }
+
+        /* Glass Panel */
+        .glass {
+            background: rgba(13, 17, 23, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(157, 189, 204, 0.1);
+        }
+
+        /* Terminal Window */
+        .terminal {
+            background: linear-gradient(135deg, #0a0e15 0%, #0d1117 100%);
+            border: 1px solid rgba(31, 79, 143, 0.3);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 0 20px rgba(11, 95, 198, 0.05);
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(0.95); opacity: 1; }
+        }
+
+        .pulse-ring {
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #9DBDCC 0%, #0B5FC6 50%, #1F4F8F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Metric Card Hover */
+        .metric-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-black);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-blue-dark);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-blue-vibrant);
+        }
+
+        /* Wave Animation */
+        @keyframes wave {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .wave {
+            animation: wave 3s ease-in-out infinite;
+        }
+
+        /* Scan Line Effect */
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(11, 95, 198, 0.03), transparent);
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Status Indicator */
+        .status-dot {
+            position: relative;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes ping {
+            75%, 100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Feature Icon Glow */
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+
+        .feature-icon:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px rgba(11, 95, 198, 0.5));
+        }
+    </style>
+</head>
+<body class="grid-bg selection:bg-blue-900/30 selection:text-blue-200">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="relative w-8 h-8">
+                        <div class="absolute inset-0 bg-blue-600 rounded-lg blur opacity-50"></div>
+                        <div class="relative w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">
+                        <span class="text-white">Vigilant</span>
+                    </span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-sm text-gray-400 hover:text-white transition-colors">Recursos</a>
+                    <a href="#how-it-works" class="text-sm text-gray-400 hover:text-white transition-colors">Como Funciona</a>
+                    <a href="#pricing" class="text-sm text-gray-400 hover:text-white transition-colors">Preços</a>
+                    <a href="#" class="text-sm text-gray-400 hover:text-white transition-colors">Documentação</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-sm text-gray-300 hover:text-white transition-colors">Entrar</a>
+                    <button class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition-all glow-blue">
+                        Começar Grátis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-40 left-10 w-72 h-72 bg-blue-900/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-40 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Content -->
+                <div class="space-y-8">
+                    <div class="inline-flex items-center space-x-2 glass rounded-full px-4 py-2 border border-blue-500/20">
+                        <div class="w-2 h-2 rounded-full bg-green-500 status-dot"></div>
+                        <span class="font-code text-xs text-blue-200">Sistema Operacional • Uptime 99.99%</span>
+                    </div>
+
+                    <div>
+                        <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
+                            Monitore Tudo.<br/>
+                            <span class="gradient-text glow-text">Sempre Vigilante.</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-400 leading-relaxed max-w-xl">
+                            Plataforma de monitoramento em tempo real para aplicações web. 
+                            Ping, uptime, SSL, performance e analytics em um único dashboard.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="group bg-white text-black px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all flex items-center justify-center space-x-2">
+                            <span>Iniciar Monitoramento</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </button>
+                        <button class="glass px-8 py-4 rounded-lg font-semibold text-white hover:bg-white/10 transition-all neon-border">
+                            Ver Demo ao Vivo
+                        </button>
+                    </div>
+
+                    <div class="pt-8">
+                        <div class="font-code text-xs text-gray-500 mb-3">INSTALAÇÃO RÁPIDA</div>
+                        <div class="glass rounded-lg p-4 font-code text-sm border border-blue-900/30">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-400">$ npm install @vigilant/sdk</span>
+                                <button class="text-blue-400 hover:text-blue-300 transition-colors" onclick="copyCode()">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-gray-800">
+                        <div>
+                            <div class="text-3xl font-bold font-code text-white mb-1">15+</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider">Regiões Globais</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold font-code text-white mb-1">500ms</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider">Resposta Média</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold font-code text-white mb-1">24/7</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider">Suporte Ativo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Dashboard Mockup -->
+                <div class="relative">
+                    <div class="scan-line"></div>
+                    
+                    <!-- Main Terminal -->
+                    <div class="terminal rounded-xl overflow-hidden relative">
+                        <!-- Terminal Header -->
+                        <div class="bg-black/40 px-4 py-3 border-b border-gray-800 flex justify-between items-center">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                            </div>
+                            <div class="font-code text-xs text-gray-500">vigilant-dashboard.tsx</div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 rounded-full bg-green-500 pulse-ring"></div>
+                                <span class="font-code text-xs text-green-400">LIVE</span>
+                            </div>
+                        </div>
+
+                        <!-- Dashboard Content -->
+                        <div class="p-6 space-y-6">
+                            <!-- Metrics Grid -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="glass rounded-lg p-4 metric-card">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div class="text-xs text-gray-500 font-code">UPTIME</div>
+                                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold font-code text-green-400">99.98%</div>
+                                    <div class="text-xs text-gray-600 mt-1">Últimos 30 dias</div>
+                                </div>
+
+                                <div class="glass rounded-lg p-4 metric-card">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div class="text-xs text-gray-500 font-code">PING</div>
+                                        <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold font-code text-blue-400">24ms</div>
+                                    <div class="text-xs text-gray-600 mt-1">Média global</div>
+                                </div>
+
+                                <div class="glass rounded-lg p-4 metric-card">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div class="text-xs text-gray-500 font-code">REQUISIÇÕES</div>
+                                        <div class="w-2 h-2 rounded-full bg-purple-500"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold font-code text-purple-400">1.2M</div>
+                                    <div class="text-xs text-gray-600 mt-1">Este mês</div>
+                                </div>
+
+                                <div class="glass rounded-lg p-4 metric-card">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div class="text-xs text-gray-500 font-code">SSL</div>
+                                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold font-code text-green-400">89d</div>
+                                    <div class="text-xs text-gray-600 mt-1">Válido até</div>
+                                </div>
+                            </div>
+
+                            <!-- Live Activity -->
+                            <div class="glass rounded-lg p-4">
+                                <div class="text-xs text-gray-500 font-code mb-3">ATIVIDADE AO VIVO</div>
+                                <div class="space-y-2 font-code text-xs">
+                                    <div class="flex items-center text-gray-400">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span class="text-gray-600">[10:42:18]</span>
+                                        <span class="ml-2">us-east-1</span>
+                                        <span class="text-green-400 ml-auto">12ms</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-400">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span class="text-gray-600">[10:42:17]</span>
+                                        <span class="ml-2">eu-west-1</span>
+                                        <span class="text-green-400 ml-auto">45ms</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-400">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span class="text-gray-600">[10:42:16]</span>
+                                        <span class="ml-2">ap-south-1</span>
+                                        <span class="text-green-400 ml-auto">67ms</span>
+                                    </div>
+                                    <div class="flex items-center text-blue-400 animate-pulse">
+                                        <span class="mr-2">▶</span>
+                                        <span class="text-gray-600">[10:42:19]</span>
+                                        <span class="ml-2">Verificando...</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chart -->
+                            <div class="glass rounded-lg p-4">
+                                <div class="text-xs text-gray-500 font-code mb-3">LATÊNCIA (24H)</div>
+                                <div class="flex items-end justify-between h-20 gap-1">
+                                    <div id="chart-container" class="flex items-end justify-between w-full gap-1">
+                                        <!-- Filled by JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Alert Card -->
+                    <div class="absolute -bottom-6 -left-6 glass rounded-lg p-4 max-w-xs border border-green-500/30 hidden md:block">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-white mb-1">Tudo Operacional</div>
+                                <div class="text-xs text-gray-400">Todos os sistemas estão funcionando normalmente</div>
+                                <div class="text-xs text-gray-600 font-code mt-2">há 2 segundos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="py-12 border-y border-white/5 bg-black/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <div class="font-code text-xs text-gray-500 uppercase tracking-wider">Construído com Tecnologias Modernas</div>
+            </div>
+            <div class="flex flex-wrap justify-center items-center gap-12 opacity-50 hover:opacity-100 transition-all duration-500">
+                <div class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/>
+                    </svg>
+                    <span class="font-bold text-lg">React</span>
+                </div>
+                <div class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.572 0c-.176 0-.31.001-.358.007a19.76 19.76 0 0 1-.364.033C7.443.346 4.25 2.185 2.228 5.012a11.875 11.875 0 0 0-2.119 5.243c-.096.659-.108.854-.108 1.747s.012 1.089.108 1.748c.652 4.506 3.86 8.292 8.209 9.695.779.25 1.6.422 2.534.525.363.04 1.935.04 2.299 0 1.611-.178 2.977-.577 4.323-1.264.207-.106.247-.134.219-.158-.02-.013-.9-1.193-1.955-2.62l-1.919-2.592-2.404-3.558a338.739 338.739 0 0 0-2.422-3.556c-.009-.002-.018 1.579-.023 3.51-.007 3.38-.01 3.515-.052 3.595a.426.426 0 0 1-.206.214c-.075.037-.14.044-.495.044H7.81l-.108-.068a.438.438 0 0 1-.157-.171l-.05-.106.006-4.703.007-4.705.072-.092a.645.645 0 0 1 .174-.143c.096-.047.134-.051.54-.051.478 0 .558.018.682.154.035.038 1.337 1.999 2.895 4.361a10760.433 10760.433 0 0 0 4.735 7.17l1.9 2.879.096-.063a12.317 12.317 0 0 0 2.466-2.163 11.944 11.944 0 0 0 2.824-6.134c.096-.66.108-.854.108-1.748 0-.893-.012-1.088-.108-1.747-.652-4.506-3.859-8.292-8.208-9.695a12.597 12.597 0 0 0-2.499-.523A33.119 33.119 0 0 0 11.573 0zm4.069 7.217c.347 0 .408.005.486.047a.473.473 0 0 1 .237.277c.018.06.023 1.365.018 4.304l-.006 4.218-.744-1.14-.746-1.14v-3.066c0-1.982.01-3.097.023-3.15a.478.478 0 0 1 .233-.296c.096-.05.13-.054.5-.054z"/>
+                    </svg>
+                    <span class="font-bold text-lg">Next.js</span>
+                </div>
+                <div class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16.405 5.501c-.115 0-.193.014-.274.033v.013h.014c.054.104.146.18.214.273.054.107.1.214.154.32l.014-.015c.094-.066.14-.172.14-.333-.04-.047-.046-.094-.08-.14-.04-.067-.126-.1-.18-.153zM5.77 18.695h-.927a50.854 50.854 0 00-.27-4.41h-.008l-1.41 4.41H2.45l-1.4-4.41h-.01a72.892 72.892 0 00-.195 4.41H0c.055-1.966.192-3.81.41-5.53h1.15l1.335 4.064h.008l1.347-4.064h1.095c.242 2.015.384 3.86.428 5.53zm4.017-4.08c-.378 2.045-.876 3.533-1.492 4.46-.482.716-1.01 1.073-1.583 1.073-.153 0-.34-.046-.566-.138v-.494c.11.017.24.026.386.026.268 0 .483-.075.647-.222.197-.18.295-.382.295-.605 0-.155-.077-.47-.23-.944L6.23 14.615h.91l.727 2.36c.164.536.233.93.205 1.188.4-1.064.678-2.227.835-3.483h.88zm12.325 4.08h-2.63v-5.53h.885v4.85h1.745v.68zm-3.32.135l-1.016-.5c.09-.076.177-.158.255-.25.433-.506.648-1.258.648-2.253 0-1.83-.718-2.746-2.155-2.746-.704 0-1.254.232-1.65.697-.43.508-.646 1.256-.646 2.245 0 .972.19 1.686.574 2.14.35.41.877.615 1.583.615.264 0 .506-.033.725-.098l1.325.772.36-.622zM15.5 17.588c-.225-.36-.337-.94-.337-1.736 0-1.393.424-2.09 1.27-2.09.443 0 .77.167.977.5.224.362.336.936.336 1.723 0 1.404-.424 2.108-1.27 2.108-.44 0-.77-.167-.978-.5zm-4.09-1.736c0-.893-.132-1.53-.396-1.915-.264-.38-.65-.573-1.16-.573-.5 0-.888.192-1.164.573-.264.386-.396 1.022-.396 1.915 0 .898.132 1.538.396 1.92.276.382.665.572 1.164.572.51 0 .896-.19 1.16-.572.264-.382.396-1.022.396-1.92zm19.098 3.317c-.674 0-1.168-.035-1.482-.104V16.78c.412-.066.96-.1 1.648-.1.86 0 1.5.155 1.917.466.344.244.517.604.517 1.08 0 .473-.174.86-.52 1.16-.383.334-.998.5-1.845.5l-.235-.017zm0-3.936l-.467.017v2.564c.107.025.235.038.386.038.745 0 1.118-.444 1.118-1.33 0-.834-.39-1.25-1.17-1.25-.088 0-.17.007-.235.02z"/>
+                    </svg>
+                    <span class="font-bold text-lg">MySQL</span>
+                </div>
+                <div class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm-9.78 0a2.236 2.236 0 0 1-2.236 2.236A2.236 2.236 0 0 1 0 12.004a2.236 2.236 0 0 1 2.214-2.236 2.236 2.236 0 0 1 2.236 2.236zm19.55 0a2.236 2.236 0 0 1-2.236 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.236-2.236 2.236 2.236 0 0 1 2.236 2.236z"/>
+                    </svg>
+                    <span class="font-bold text-lg">Cloud Hosting</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Recursos Poderosos</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Tudo que você precisa para manter suas aplicações online e performáticas
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="glass neon-border rounded-xl p-8 group">
+                    <div class="w-12 h-12 bg-blue-600/10 rounded-lg flex items-center justify-center mb-4 feature-icon">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Monitoramento em Tempo Real</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Receba atualizações instantâneas via WebSocket. Veja mudanças de status ao vivo sem refresh.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm font-code text-blue-400">
+                        <span>Latência &lt; 100ms</span>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass neon-border rounded-xl p-8 group">
+                    <div class="w-12 h-12 bg-green-600/10 rounded-lg flex items-center justify-center mb-4 feature-icon">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Uptime 99.9%</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Infraestrutura redundante em múltiplas regiões garante disponibilidade máxima.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm font-code text-green-400">
+                        <span>SLA Garantido</span>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass neon-border rounded-xl p-8 group">
+                    <div class="w-12 h-12 bg-purple-600/10 rounded-lg flex items-center justify-center mb-4 feature-icon">
+                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Alertas Inteligentes</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Configure notificações via Slack, Discord, Email ou Webhook. Você escolhe quando e como ser notificado.
+                    </p>
+                    <div class="mt-4 flex gap-2">
+                        <span class="px-2 py-1 bg-purple-900/20 rounded text-xs text-purple-300">Slack</span>
+                        <span class="px-2 py-1 bg-purple-900/20 rounded text-xs text-purple-300">Discord</span>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass neon-border rounded-xl p-8 group">
+                    <div class="w-12 h-12 bg-yellow-600/10 rounded-lg flex items-center justify-center mb-4 feature-icon">
+                        <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Verificação SSL</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Monitore certificados SSL/TLS. Receba alertas antes da expiração.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm font-code text-yellow-400">
+                        <span>Auto-renewal check</span>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="glass neon-border rounded-xl p-8 group">
+                    <div class="w-12 h-12 bg-red-600/10 rounded-lg flex items-center justify-center mb-4 feature-icon">
+                        <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Analytics Avançado</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Métricas detalhadas de performance, Core Web Vitals, e tempo de resposta por região.
+                    </p>
+                    <div class="mt-4 flex items-center text-sm font-code text-red-400">
+                        <span>Dashboard customizável</span>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="glass neon-border rounded-xl p-8 group">
+                    <div class="w-12 h-12 bg-cyan-600/10 rounded-lg flex items-center justify-center mb-4 feature-icon">
+                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">API RESTful</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Integre facilmente com seus sistemas existentes. Documentação completa e SDKs oficiais.
+                    </p>
+                    <div class="mt-4 glass rounded px-3 py-1 font-code text-xs text-cyan-400">
+                        GET /api/v1/sites
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-24 bg-black/40 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Como Funciona</h2>
+                <p class="text-gray-400 text-lg">Configure em minutos, monitore para sempre</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
+                        <span class="text-2xl font-bold font-code text-blue-400">1</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Adicione seu Site</h3>
+                    <p class="text-sm text-gray-400">Cole a URL e configure intervalos de verificação</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
+                        <span class="text-2xl font-bold font-code text-blue-400">2</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Conecte Integrações</h3>
+                    <p class="text-sm text-gray-400">Slack, Discord, Email ou Webhooks customizados</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
+                        <span class="text-2xl font-bold font-code text-blue-400">3</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Monitore em Tempo Real</h3>
+                    <p class="text-sm text-gray-400">Dashboard atualizado ao vivo com WebSockets</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
+                        <span class="text-2xl font-bold font-code text-blue-400">4</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Receba Alertas</h3>
+                    <p class="text-sm text-gray-400">Notificações instantâneas quando algo falhar</p>
+                </div>
+            </div>
+
+            <div class="mt-16 glass rounded-xl p-8 max-w-3xl mx-auto neon-border">
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Exemplo de Código</h4>
+                        <p class="text-gray-400 text-sm mb-4">Integre o Vigilant em sua aplicação com poucas linhas de código:</p>
+                        <div class="bg-black/60 rounded-lg p-4 font-code text-sm overflow-x-auto">
+                            <pre class="text-gray-300"><code><span class="text-purple-400">import</span> { Vigilant } <span class="text-purple-400">from</span> <span class="text-green-400">'@vigilant/sdk'</span>;
+
+<span class="text-blue-400">const</span> monitor = <span class="text-purple-400">new</span> <span class="text-yellow-400">Vigilant</span>({
+  apiKey: <span class="text-green-400">'your-api-key'</span>,
+  site: <span class="text-green-400">'https://yoursite.com'</span>
+});
+
+<span class="text-gray-500">// Iniciar monitoramento</span>
+monitor.<span class="text-yellow-400">start</span>();</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Planos Transparentes</h2>
+                <p class="text-gray-400 text-lg">Escolha o plano ideal para seu projeto</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Starter -->
+                <div class="glass rounded-xl p-8 neon-border">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Starter</h3>
+                        <div class="flex items-baseline">
+                            <span class="text-4xl font-bold font-code">R$0</span>
+                            <span class="text-gray-500 ml-2">/mês</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Perfeito para projetos pessoais</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>5 sites monitorados</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Verificação a cada 5 minutos</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Alertas por email</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Histórico de 7 dias</span>
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 border border-gray-700 rounded-lg hover:bg-white/5 transition-all text-sm font-medium">
+                        Começar Grátis
+                    </button>
+                </div>
+
+                <!-- Pro -->
+                <div class="glass rounded-xl p-8 border-2 border-blue-500/50 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-4 py-1 rounded-full font-bold">
+                        POPULAR
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Pro</h3>
+                        <div class="flex items-baseline">
+                            <span class="text-4xl font-bold font-code text-blue-400">R$49</span>
+                            <span class="text-gray-500 ml-2">/mês</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Para desenvolvedores sérios</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>50 sites monitorados</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Verificação a cada 1 minuto</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Slack, Discord, Webhooks</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Histórico de 90 dias</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>API Access</span>
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 bg-blue-600 rounded-lg hover:bg-blue-500 transition-all text-sm font-medium glow-blue">
+                        Upgrade para Pro
+                    </button>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="glass rounded-xl p-8 neon-border">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                        <div class="flex items-baseline">
+                            <span class="text-4xl font-bold font-code">Custom</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Para equipes e empresas</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Sites ilimitados</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Verificação a cada 30 segundos</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Suporte prioritário 24/7</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>Histórico ilimitado</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span>SSO & Audit Logs</span>
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 border border-gray-700 rounded-lg hover:bg-white/5 transition-all text-sm font-medium">
+                        Falar com Vendas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-blue-900/10 to-transparent"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                Pronto para Começar?
+            </h2>
+            <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                Junte-se a milhares de desenvolvedores que confiam no Vigilant para manter suas aplicações online
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-white text-black px-8 py-4 rounded-lg font-bold hover:bg-gray-200 transition-all text-lg">
+                    Criar Conta Grátis
+                </button>
+                <button class="glass px-8 py-4 rounded-lg font-bold text-white hover:bg-white/10 transition-all neon-border text-lg">
+                    Agendar Demo
+                </button>
+            </div>
+            <p class="text-sm text-gray-500 mt-6">Sem cartão de crédito • Setup em 2 minutos</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-black/60 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </div>
+                        <span class="font-bold text-xl">Vigilant</span>
+                    </div>
+                    <p class="text-sm text-gray-400">Monitoramento inteligente de aplicações web para desenvolvedores.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-sm">Produto</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Recursos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Preços</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Documentação</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4 text-sm">Empresa</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Sobre</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Carreiras</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4 text-sm">Comunidade</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">GitHub</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Discord</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Twitter</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Status</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-500">© 2024 Vigilant. Todos os direitos reservados.</p>
+                <div class="flex space-x-6 text-sm text-gray-500 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors">Privacidade</a>
+                    <a href="#" class="hover:text-white transition-colors">Termos</a>
+                    <a href="#" class="hover:text-white transition-colors">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Generate chart bars
+        const chartContainer = document.getElementById('chart-container');
+        const barCount = 30;
+        
+        for(let i = 0; i < barCount; i++) {
+            const height = Math.floor(Math.random() * 70) + 15;
+            const bar = document.createElement('div');
+            bar.className = 'w-full bg-blue-500/40 hover:bg-blue-400 rounded-t transition-all duration-300 cursor-pointer';
+            bar.style.height = `${height}%`;
+            chartContainer.appendChild(bar);
+        }
+
+        // Animate bars randomly
+        setInterval(() => {
+            const bars = document.querySelectorAll('#chart-container div');
+            const randomBar = bars[Math.floor(Math.random() * bars.length)];
+            const newHeight = Math.floor(Math.random() * 70) + 15;
+            randomBar.style.height = `${newHeight}%`;
+        }, 1000);
+
+        // Copy code function
+        function copyCode() {
+            const code = '$ npm install @vigilant/sdk';
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Comando copiado!');
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
