@@ -1,6 +1,3 @@
-Segue um README um pouco mais completo, mas ainda simples e direto:
-
-```markdown
 # Vigilant – Monitoramento Inteligente de Sites
 
 Landing page para um SaaS de **monitoramento de aplicações web**, com foco em desenvolvedores.  
