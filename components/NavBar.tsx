@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const NavBar = () => {
   return (
-        <nav className="navbar">
+        <nav className="navbar  ">
             <Link href="/" className="navbar-logo">MyApp</Link>
             <menu className="navbar-links">
                 <li><Link href="/about">About</Link></li>
