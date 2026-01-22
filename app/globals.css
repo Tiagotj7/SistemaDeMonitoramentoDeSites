@@ -1,1 +1,22 @@
+<<<<<<< HEAD
  @charset "UTF-8";
+=======
+/* globals.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-slate-blue: #3275CD;
+  --color-midnight-Blue: #0D3161;
+  --color-sky-blue: #B5E3EF;
+  --color-dodger-blue: #006EEF;
+  --color-text: #f2f3f5;
+  --font-inter: var(--font-inter), sans-serif;
+  --font-montserrat: var(--font-montserrat), sans-serif;
+  --font-fira-code: var(--font-fira-code), monospace;
+}
+>>>>>>> dd3252a (add color and fonts)
