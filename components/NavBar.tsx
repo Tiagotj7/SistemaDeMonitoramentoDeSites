@@ -1,19 +1,16 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
 
-export const Main = () => {
+export const NavBar = () => {
   return (
-   
-    <div className="navbar-container">
         <nav className="navbar">
-            <a href="/" className="navbar-logo">MyApp</a>
-            <ul className="navbar-links">
-                <li><a href="/about">About</a></li>
-                <li><a href="/services">Services</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
+            <Link href="/" className="navbar-logo">MyApp</Link>
+            <menu className="navbar-links">
+                <li><Link href="/about">About</Link></li>
+                <li><Link href="/services">Services</Link></li>
+                <li><Link href="/contact">Contact</Link></li>
+            </menu>
         </nav>
-    </div>
-
   );
 };
