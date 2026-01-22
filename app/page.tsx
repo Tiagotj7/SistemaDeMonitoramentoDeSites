@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Main as NavBar } from '../components/NavBar';
+import { NavBar } from '../components/NavBar';
 
 export default function Page() {
   return (
