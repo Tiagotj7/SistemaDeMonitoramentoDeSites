@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Inter, Montserrat, Fira_Code } from 'next/font/google';
 import './globals.css';
+import React from 'react';
+import './navbar.css';
 
 // Configurar cada fonte
 const inter = Inter({
