@@ -1,5 +1,22 @@
 @charset "UTF-8";
 
+/* ==========RESET + BASE===========*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--background);
+  color: var(--color-text);
+  font-family: var(--font-inter);
+}
+
+/* ==========VARIÁVEIS===========*/
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -13,10 +30,5 @@
   --font-fira-code: var(--font-fira-code), monospace;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter);
-}
+/* ==========OTHERS===========*/
+
