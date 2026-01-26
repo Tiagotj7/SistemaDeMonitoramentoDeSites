@@ -1,66 +1,28 @@
-.loadingContainer {
-    position: relative;
-    height: 100vh;
-    width: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: linear-gradient(
-        135deg,
-            #0c2c57,
-            #150837,
-            #0a1434,
-            #0b0422,
-            #0b0422);
-}
-
-.loadingContainer::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('/LogoVigilant.png') center / contain no-repeat;
-}
-
 /* CONTEÚDO */
 .content {
-    position: relative;
-    z-index: 1;
-    max-width: 720px;
-    padding: 0 24px;
 
-    /* ANIMAÇÃO SUAVE */
-    animation: fadeUp 1.2s ease forwards;
+
+  grid-row: 3;
+  justify-self: center;
+  align-self: end; 
 }
 
 /* TÍTULO */
 .content h1 {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 500;
-    margin-bottom: 14px;
+  font-size: 1.8rem;
+  font-family: var(--font-inter);
+  font-weight: 300;
+  margin-bottom: 1.7rem;
 }
 
 .content h1 span {
-    font-weight: 700;
-    letter-spacing: 0.08em;
+  font-family: var(--font-ruda);
+  font-weight: 500;
+  letter-spacing: 0.08em;
 }
 
 /* TEXTO */
 .content p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-/* ANIMAÇÃO */
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  font-size: 0.85rem;
+  line-height: 1.4;
 }

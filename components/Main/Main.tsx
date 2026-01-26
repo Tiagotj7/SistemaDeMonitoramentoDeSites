@@ -1,6 +1,10 @@
+import { Loading } from '../Loading/Loading';
+import styles from './Main.module.css'
 
 export const Main = () => {
   return (
-    <main className="min-h-screen" />
+    <main className={styles.main}>
+      <Loading />
+    </main>
   );
 };
