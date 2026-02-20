@@ -1,0 +1,133 @@
+.section{
+  position: relative;
+  padding: 92px 0 110px;
+  background: transparent; /* herda o fundo global */
+}
+
+.container{
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+/* Tipografia */
+.title{
+  margin: 0;
+  font-size: clamp(36px, 5vw, 56px);
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: var(--text-1);
+
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(1px);
+}
+
+.subtitle{
+  margin: 10px auto 0;
+  max-width: 720px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-3);
+
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(1px);
+}
+
+.actions{
+  margin-top: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.btnPrimary,
+.btnSecondary{
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+/* Botão branco */
+.btnPrimary{
+  background: #fff;
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #0b0b12;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+}
+.btnPrimary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.30);
+}
+
+/* Botão escuro */
+.btnSecondary{
+  background: rgba(15, 22, 43, 0.55);
+  color: var(--text-1);
+  border: 1px solid var(--border-1);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+}
+.btnSecondary:hover{
+  transform: translateY(-2px);
+  border-color: var(--border-2);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.28);
+}
+
+.small{
+  margin-top: 18px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* Animações (stagger) */
+.isVisible .title{
+  animation: fadeUp 700ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+.isVisible .subtitle{
+  animation: fadeUp 700ms cubic-bezier(.2,.8,.2,1) 90ms forwards;
+}
+.isVisible .actions{
+  animation: fadeUp 700ms cubic-bezier(.2,.8,.2,1) 180ms forwards;
+}
+.isVisible .small{
+  animation: fadeUp 700ms cubic-bezier(.2,.8,.2,1) 270ms forwards;
+}
+
+@keyframes fadeUp{
+  from { opacity: 0; transform: translateY(14px); filter: blur(1px); }
+  to   { opacity: 1; transform: translateY(0);  filter: blur(0); }
+}
+
+@media (max-width: 520px){
+  .actions{
+    flex-direction: column;
+    gap: 12px;
+  }
+  .btnPrimary, .btnSecondary{
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .title, .subtitle, .actions, .small{
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
