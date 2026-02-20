@@ -1,0 +1,154 @@
+.footer{
+  position: relative;
+  background: transparent; /* herda o bg global */
+  padding: 56px 0 26px;
+}
+
+/* uma “camada” suave pra destacar o footer sem quebrar o background */
+.footer::before{
+  content:"";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.10);
+  pointer-events: none;
+}
+
+.container{
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.top{
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+.brand{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 320px;
+}
+
+.logoWrap{
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+}
+
+.logo{
+  opacity: 0.95;
+  object-fit: contain;
+}
+
+.logoWrap:hover .logo{
+  opacity: 1;
+  transform: scale(1.5, 1.5);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.brandText{
+  margin: 0;
+  color: var(--text-3);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.colTitle{
+  color: var(--text-1);
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.links{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.link{
+  color: rgba(255,255,255,0.46);
+  font-size: 13px;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 160ms ease, transform 160ms ease;
+  width: fit-content;
+}
+
+.link:hover{
+  color: rgba(255,255,255,0.78);
+  transform: translateX(2px);
+}
+
+.divider{
+  margin: 28px 0 18px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.12),
+    transparent
+  );
+}
+
+.bottom{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.copy{
+  color: rgba(255,255,255,0.38);
+  font-size: 11px;
+}
+
+.bottomLinks{
+  display: flex;
+  gap: 18px;
+}
+
+.bottomLink{
+  color: rgba(255,255,255,0.38);
+  font-size: 11px;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.bottomLink:hover{
+  color: rgba(255,255,255,0.62);
+}
+
+/* Responsivo */
+@media (max-width: 900px){
+  .top{
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+  }
+  .brand{
+    grid-column: 1 / -1;
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 520px){
+  .top{
+    grid-template-columns: 1fr;
+  }
+  .bottom{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bottomLinks{
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+}

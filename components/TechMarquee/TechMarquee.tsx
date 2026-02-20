@@ -51,8 +51,7 @@ export default function TechMarquee({
     >
       <div className={styles.track}>
         {loop.map((it, i) => {
-          const shouldHighlight = i === highlightIndex; // só no primeiro ciclo
-          return (
+const shouldHighlight = typeof highlightIndex === "number" && highlightIndex >= 0 && i === highlightIndex;          return (
             <div
               key={`${it.alt}-${i}`}
               className={`${styles.item} ${shouldHighlight ? styles.highlight : ""}`}

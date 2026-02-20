@@ -1,0 +1,134 @@
+.main {
+  position: relative;
+  min-height: 100svh;
+  padding: 80px 0 120px;
+  background: transparent; /* Herda o fundo global */
+}
+
+.container {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* HEADER */
+.header {
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border-1);
+}
+
+.title {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  margin: 0 0 12px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.subtitle time {
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+/* CONTEÚDO (Tipografia) */
+.content {
+  color: var(--text-2);
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 48px 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin: 32px 0 12px;
+}
+
+.content p {
+  margin: 16px 0;
+}
+
+.content ul,
+.content ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.content li {
+  margin: 8px 0;
+}
+
+.content strong {
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+.content a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms ease;
+}
+
+.content a:hover {
+  border-bottom-color: var(--accent-cyan);
+}
+
+/* Destaque para blocos de atenção */
+.content blockquote {
+  margin: 24px 0;
+  padding: 16px 20px;
+  border-left: 3px solid var(--accent-blue);
+  background: rgba(45, 124, 255, 0.08);
+  border-radius: 0 8px 8px 0;
+  color: var(--text-2);
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-1);
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-3);
+}
+
+.footer a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* RESPONSIVO */
+@media (max-width: 640px) {
+  .main {
+    padding: 48px 0 80px;
+  }
+  .header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+  }
+  .content h2 {
+    font-size: 22px;
+    margin-top: 40px 0 14px;
+  }
+}

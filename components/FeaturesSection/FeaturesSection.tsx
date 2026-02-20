@@ -127,7 +127,7 @@ export default function FeaturesSection() {
   return (
     <section ref={ref} className={`${styles.section} ${inView ? styles.isVisible : ""}`}>
       <div className={styles.container}>
-        <header className={styles.header}>
+        <header id="Recursos" className={styles.header}>
           <h2 className={styles.title}>Recursos Poderosos</h2>
           <p className={styles.subtitle}>
             Tudo que você precisa para manter suas aplicações online e performáticas.

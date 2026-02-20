@@ -12,7 +12,7 @@ export default function CtaSection({ onPrimaryClick, onSecondaryClick }: Props) 
   const { ref, inView } = useInViewOnce<HTMLElement>();
 
   return (
-    <section
+    <section id="Contato"
       ref={ref}
       className={`${styles.section} ${inView ? styles.isVisible : ""}`}
     >
