@@ -1,15 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Main } from '@/components/Main/Main';
-import HeroMonitoring from '@/components/Hero/HeroMonitoring';
+import LandingHero from "@/components/LandingHero/LandingHero";
 
-export default function Home() {
+export default function Page() {
   return (
     <main>
-      <HeroMonitoring />
-
+      <LandingHero />
     </main>
   );
 }

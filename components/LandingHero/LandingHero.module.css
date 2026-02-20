@@ -1,0 +1,42 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #070b2a; /* fallback */
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 700px at 15% 10%, #0b2a5a 0%, rgba(11, 42, 90, 0) 55%),
+    linear-gradient(135deg, #07163a 0%, #130a35 55%, #070b2a 100%);
+}
+
+.diagonal {
+  position: absolute;
+  left: 33%;
+  top: -20%;
+  height: 160%;
+  width: 60%;
+  transform: rotate(-18deg);
+  background: rgba(255, 255, 255, 0.06);
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 64px 0 16px;
+}
+
+.marqueeArea {
+  margin-top: 18px;
+}
