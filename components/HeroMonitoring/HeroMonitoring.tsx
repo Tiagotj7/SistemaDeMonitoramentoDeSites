@@ -5,7 +5,7 @@ export default function HeroMonitoring() {
     <div className={styles.container}>
       <div className={styles.grid}>
         {/* LEFT */}
-        <div>
+        <div className={styles.left}>
           <h1 className={styles.title}>
             Monitoramento{"\n"}
             inteligente{"\n"}
@@ -14,8 +14,8 @@ export default function HeroMonitoring() {
           </h1>
 
           <p className={styles.subtitle}>
-            Acompanhe uptime, latência e validade do SSL em tempo real com um
-            dashboard simples, rápido e pensado para desenvolvedores.
+            Acompanhe uptime, latência e validade do SSL em tempo real com um dashboard
+            simples, rápido e pensado para desenvolvedores.
           </p>
         </div>
 
@@ -62,7 +62,7 @@ export default function HeroMonitoring() {
                   </div>
 
                   <div className={styles.middle}>
-                    <div className={`${styles.panel} ${styles.panelWide}`}>
+                    <div className={styles.panel}>
                       <div className={styles.panelTitle}>Estatistica de tráfego</div>
 
                       <div className={styles.bars}>

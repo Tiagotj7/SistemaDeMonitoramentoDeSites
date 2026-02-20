@@ -1,16 +1,20 @@
 .band{
-  height: 96px;
+  /* controla “respiro” vertical da faixa */
+  --padY: 16px;
+
+  height: calc(var(--badge, 62px) + (var(--padY) * 2));
   display: flex;
   align-items: center;
-  overflow: hidden;
 
-  /* transparente para “herdar” o fundo do Hero */
+  /* esconda só no eixo X para não cortar highlight em cima */
+  overflow-x: hidden;
+  overflow-y: visible;
+
   background: transparent;
 
-  /* padding aqui (NÃO nas tracks) para não criar buraco na emenda */
-  padding-inline: 18px;
+  /* padding agora inclui o vertical */
+  padding: var(--padY) 18px;
 
-  /* fade nas bordas (como no print) */
   -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
 }
@@ -100,5 +104,9 @@
 }
 
 @media (max-width: 520px){
-  .band{ height: 84px; padding-inline: 14px; }
+    .band{
+    --padY: 12px;
+    padding: var(--padY) 14px;
+    height: calc(var(--badge, 62px) + (var(--padY) * 2));
+  }
 }

@@ -2,27 +2,31 @@
   position: relative;
   min-height: 100svh;
   overflow: hidden;
-  background: #070b2a; /* fallback */
+  background: transparent;
 }
 
-.bg {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(1200px 700px at 15% 10%, #0b2a5a 0%, rgba(11, 42, 90, 0) 55%),
-    linear-gradient(135deg, #07163a 0%, #130a35 55%, #070b2a 100%);
-}
-
+/* diagonal animada */
 .diagonal {
   position: absolute;
   left: 33%;
-  top: -20%;
-  height: 160%;
-  width: 60%;
-  transform: rotate(-18deg);
-  background: rgba(255, 255, 255, 0.06);
-  filter: blur(1px);
+  top: -22%;
+  height: 170%;
+  width: 62%;
   pointer-events: none;
+  z-index: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  filter: blur(1px);
+
+  /* animação */
+  transform: rotate(-18deg) translateX(44px);
+  opacity: 0;
+  animation: diagonalIn 1100ms cubic-bezier(.2,.8,.2,1) 120ms both;
 }
 
 .wrapper {
@@ -39,4 +43,27 @@
 
 .marqueeArea {
   margin-top: 18px;
+
+  /* reveal suave do marquee */
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeUp 900ms cubic-bezier(.2,.8,.2,1) 700ms both;
+}
+
+@keyframes diagonalIn{
+  from { opacity: 0; transform: rotate(-18deg) translateX(44px); }
+  to   { opacity: 1; transform: rotate(-18deg) translateX(0); }
+}
+
+@keyframes fadeUp{
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .diagonal, .marqueeArea{
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
